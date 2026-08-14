@@ -7,7 +7,7 @@ const POSTER_CSS = `
   @font-face{font-family:"LongCang";src:url("design-assets/fonts/LongCang-poster.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
   :root{
     --bg:#0a0e17;--gold:#d4a843;--gold-light:#f5d77a;--gold-dark:#9a6f1c;
-    --mini:#3ddc97;--ascend:#ff7a18;--ink:#eef3fb;--ink-dim:#b8c6db;--ink-faint:#64748b;
+    --mini:#3ddc97;--accent:#ff7a18;--ink:#eef3fb;--ink-dim:#b8c6db;--ink-faint:#64748b;
     --line:rgba(255,255,255,.08);--card:rgba(255,255,255,.03);
     --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
     --brush:"LongCang","LiuJianMaoCao","KaiTi","STKaiti","楷体",cursive;
@@ -49,7 +49,7 @@ const POSTER_CSS = `
   .official-link:hover{background:rgba(212,168,67,.14);transform:translateY(-1px);}
   .official-link .ol-label{color:var(--gold);}
   .official-link .ol-url{flex:1 1 100%;min-width:0;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink-dim);letter-spacing:.01em;word-break:break-all;overflow-wrap:anywhere;line-height:1.5;margin-top:2px;}
-  .official-link .ol-enter{margin-left:auto;color:var(--ascend);font-weight:700;}
+  .official-link .ol-enter{margin-left:auto;color:var(--accent);font-weight:700;}
   .official-link .arrow{font-family:var(--mono);opacity:.9;}
   @media(max-width:640px){.official-link .ol-enter{margin-left:0;}}
   .split{display:flex;flex-wrap:wrap;gap:12px;margin-top:13px;}

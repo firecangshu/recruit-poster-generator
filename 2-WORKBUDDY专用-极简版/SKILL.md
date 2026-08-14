@@ -83,7 +83,7 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 | `chips` | 方向标签数组 | `["实时问答","视觉/语音交互"]` |
 | `reqs` | 要求项数组，每项 `"标签：内容"` | `["复现要求：统一运行环境","队伍上限：3 人"]` |
 | `teamLimit` | 队伍上限 | `3 人` |
-| `deadline` | 报名截止 | `8.14` |
+| `deadline` | 报名截止 | `XX.XX` |
 | `officialUrl` | 官网完整 URL（可空） | `https://example.com` |
 | `r1`/`r2`/`r3` | 冠/亚/季军金额（可空） | `冠军 Xw` |
 | `projSecTitle` | 负责人章节标题 | `队长的项目进度及比赛目标` |
