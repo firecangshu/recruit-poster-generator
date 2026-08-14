@@ -8,6 +8,7 @@
 |---|---|---|---|
 | [`1-通用完整版/`](1-通用完整版/) | v1.4.0 | 含 `assets/design-assets/`（woff2 字体 + hero PNG） | GitHub / Gitee / 自托管等任意平台 |
 | [`2-WORKBUDDY专用-极简版/`](2-WORKBUDDY专用-极简版/) | v1.4.0-workbuddy | 字体 + PNG 全部 base64 内嵌，**零二进制文件** | WorkBuddy / SkillHub 等禁二进制的平台 |
+| [`3-定稿模板示例/`](3-定稿模板示例/) | 视觉基准 | 终极定稿成品（竖卡 2:3 + 长图版）脱敏示例，展示 Skill 产出效果 | 查看成品效果 |
 
 ## 快速开始（对话式 · 形态 A）
 
