@@ -3,16 +3,18 @@
   （推 GitHub / Gitee / atomgit 等任意平台用这个）
 ═══════════════════════════════════════════
 
-📦 上传文件：recruit-poster-v1.4.0.zip
-（13 个文件，757KB）
+📦 版本：v1.6.0 ｜ 中文名：AI赛事英雄帖生成器
 
 ✅ 特点：
    - 含 design-assets/fonts/*.woff2 两个毛笔字体文件
-   - 生成 HTML 依赖同目录 design-assets/fonts/（需一起拷贝）
-   - 背景/hero/视觉与定稿逐行一致
+   - 含三套模版背景图：v1 单人 PNG + v2 五人 JPG + v2 长图 JPG
+   - 多模版：--template 1.0（v1竖卡）/ 2.0（v2竖卡，默认）/ 3.0（v2长图）
+   - 一份数据 招募帖-data.json 内容全模版共用，仅背景与版式切换
+   - 生成时自动把模版依赖（背景图+字体）拷贝到输出 HTML 同级 design-assets/
+   - 提供脱敏样例 模版演示-去敏样例.json（开源可直接引用，无真实 PII）
 
 ⚠️ 注意：如果推到 WorkBuddy / SkillHub 会被拒——
-   平台拒收二进制 .woff2 文件！
+   平台拒收二进制 .woff2 / 图片 文件！
    那个场景请用「2-recruit-poster-上架包-WORKBUDDY专用」。
 
-📅 版本：v1.4.0 ｜ 中文名：AI赛事英雄帖生成器
+📅 版本：v1.6.0

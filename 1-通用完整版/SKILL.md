@@ -2,9 +2,9 @@
 name: recruit-poster
 slug: recruit-poster
 displayName: AI赛事英雄帖生成器 · Recruit Poster
-version: 1.4.0
-summary: 暗金武侠风「AI赛事英雄帖」HTML 生成 Skill。支持对话式（详细）生成（口述内容→HTML）与填表式（快速）（浏览器自助填表微调）两种形态，视觉严格对齐用户终极定稿（2:3 竖卡）。
-description: AI赛事英雄帖生成器（暗金武侠风）：对话式（详细）口述或浏览器填表式（快速），产出固定 2:3 竖卡 HTML，视觉对齐用户终极定稿、只改文字、不渲染 JPG。触发词：招募帖/英雄帖/recruit poster。适用于比赛、开源项目、社群招募队友海报。
+version: 1.6.0
+summary: 暗金武侠风「AI赛事英雄帖」HTML 生成 Skill。支持对话式（详细）与填表式（快速）两种形态，提供 1.0（v1 竖卡）/2.0（v2 竖卡）/3.0（v2 长图）多模版，一份数据共用、按模版出图。
+description: AI赛事英雄帖生成器（暗金武侠风）：对话式（详细）口述或浏览器填表式（快速），通过 --template 切换 1.0/2.0/3.0 多模版产出 HTML，文字内容全模版共用、仅背景与版式随模版切换，不渲染 JPG。触发词：招募帖/英雄帖/recruit poster。适用于比赛、开源项目、社群招募队友海报。
 author: 杨博
 category: design
 visibility: public
@@ -50,13 +50,15 @@ trigger:
 C:/Users/User/.workbuddy/skills/recruit-poster/
 ├── SKILL.md
 └── assets/
-    ├── build.mjs                      # 数据(JSON) → 完整 HTML（背景层与终极定稿逐行一致，仅改文字）
-    ├── render.mjs                     # HTML → 2x JPG（Edge 无头渲染，备用；本 Skill 主流程不调用，JPG 长图由用户独立定稿负责）
+    ├── build.mjs                      # 数据(JSON) → 完整 HTML；支持 --template 1.0/2.0/3.0 多模版（内容共用，背景+版式随模版切换）
+    ├── render.mjs                     # HTML → 2x JPG（Edge 无头渲染，备用）
     ├── recruit-poster-builder.html    # 填表器成品（形态 B 用）
     ├── interview-script.md            # 形态 A 引导式访谈剧本（武侠人设·纯台词·十问流程）
     ├── interview-script-en.md         # 英文版十问剧本
     └── design-assets/                 # 背景图 + 毛笔字体（导出 HTML 的依赖）
-        ├── hero-silhouette.png
+        ├── hero-silhouette.png        # 模版 1.0 背景（v1 单人剪影）
+        ├── hero-silhouette.jpg        # 模版 2.0 背景（v2 五人剪影+满月）
+        ├── hero-silhouette-long.jpg   # 模版 3.0 背景（v2 长图底图）
         └── fonts/LiuJianMaoCao-poster.woff2
         └── fonts/LongCang-poster.woff2
 ```
@@ -86,7 +88,7 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 | `chips` | 方向标签数组 | `["实时问答","视觉/语音交互"]` |
 | `reqs` | 要求项数组，每项 `"标签：内容"` | `["复现要求：统一运行环境","队伍上限：3 人"]` |
 | `teamLimit` | 队伍上限 | `3 人` |
-| `deadline` | 报名截止 | `XX.XX` |
+| `deadline` | 报名截止 | `8.14` |
 | `officialUrl` | 官网完整 URL（可空） | `https://example.com` |
 | `r1`/`r2`/`r3` | 冠/亚/季军金额（可空） | `冠军 Xw` |
 | `projSecTitle` | 负责人章节标题 | `队长的项目进度及比赛目标` |
@@ -108,10 +110,13 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
    ```bash
    cp -r "C:/Users/User/.workbuddy/skills/recruit-poster/assets/design-assets" "<工作区>/design-assets"
    ```
-3. 运行 build.mjs 生成 HTML（脚本内含输入校验，缺关键字段仅 WARN 不中断）：
+3. 运行 build.mjs 生成 HTML（脚本内含模版选择、输入校验，缺关键字段仅 WARN 不中断）：
    ```bash
-   cd <工作区> && node "C:/Users/User/.workbuddy/skills/recruit-poster/assets/build.mjs" 招募帖-data.json 招募帖.html
+   cd <工作区> && node "C:/Users/User/.workbuddy/skills/recruit-poster/assets/build.mjs" 招募帖-data.json 招募帖.html --template 2.0
    ```
+   - `--template` 可选值：`1.0`（v1 单人竖卡）/ `2.0`（v2 五人竖卡，默认）/ `3.0`（v2 五人长图）。
+   - **同一份数据，三个模版共用文字内容**，仅背景图与版式（竖卡 2:3 / 长图自适应）不同；不传 `--template` 时默认 `2.0`。
+   - 生成时 `build.mjs` 会**自动把当前模版的背景图 + 毛笔字体拷贝到输出 HTML 同级的 `design-assets/`**，故在任意工作区运行都能开箱即用，无需手动补齐素材（上方第 2 步的手动复制可作为离线备份，可省略）。
 4. `present_files` 交付 HTML（预览）。
 
 > 临时 `招募帖-data.json` 可保留（便于二次修改重生成），或生成后删除，由用户决定。
@@ -120,7 +125,7 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 - **输入容错**：`build.mjs` 对非法 JSON、缺字段均不崩溃，缺关键字段仅 WARN 并填默认；`seats`/`reqs`/`projItems` 空数组时对应区块自动隐藏，不会出现「空卡片」。
 - **资源缺失**：工作区缺 `design-assets/` 时按 §4.2 第 2 步复制，保证背景图/毛笔字体不丢。
 - **视觉锁定**：`build.mjs` 内的 `POSTER_CSS`（背景层）已与用户终极定稿（`终版HTML/终版HTML.html`）逐行对齐，skill 只改 `.wrap` 内文字，**不改动任何背景层 CSS（hero 位置/调色/蒙层/字体/配色）**。
-- **只产出 HTML**：本 Skill 不渲染 JPG（JPG 长图由用户独立的只读定稿 `英雄招募帖-长图.html` 负责，不在 Skill 生成范围内）。
+- **只产出 HTML**：本 Skill 不自动渲染 JPG；长图版式已作为模版 3.0 内置（仍只产出 HTML），如需 JPG 可用 `render.mjs` 备用渲染。
 
 ## 5. 形态 B · 填表式（快速）
 1. 复制填表器到工作区并打开预览：
@@ -133,7 +138,7 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 ## 6. 约束
 - **不覆盖用户已有文件**：输出文件名用新名字（如 `招募帖.html`），绝不改写用户既有 `英雄招募帖.html` / `终版HTML/` / `英雄招募帖-长图.html` 等定稿。
 - **视觉锁定对齐终极定稿**：`build.mjs` 内的 `POSTER_CSS` 背景层已与用户终极定稿（`终版HTML/终版HTML.html`）逐行对齐；本 Skill **只改 `.wrap` 内文字内容**，背景层（hero 位置/调色/蒙层/字体/配色/固定 2:3 比例）一律不动。
-- **只产出 HTML**：不渲染 JPG（JPG 长图由用户独立只读定稿负责，不在本 Skill 范围）。
+- **只产出 HTML**：不自动渲染 JPG（长图已在模版 3.0 提供 HTML 版式；JPG 可用 render.mjs 备用）。
 - **无外部依赖**：CSS/字体/图片全本地化，导出的 HTML 不连任何 CDN。
 - **列表项格式**：`reqs`/`projItems` 用 `"标签：内容"`（冒号为中文全角）；`seats` 用 `标题|职责|技能`（竖线分隔）。
 
@@ -184,7 +189,7 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 | 依赖资源 | `design-assets/` | 背景图 + 毛笔字体；HTML 显示所需，需与 html 同目录 |
 
 > 形态 B 额外产出：`招募帖-填表生成.html`（填表器副本，用户在浏览器自助填写导出）。
-> JPG 长图不在此 Skill 产出范围（用户另有独立只读定稿 `英雄招募帖-长图.html`）。
+> 长图版式现由模版 3.0 内置（仅 HTML）；JPG 渲染不在自动流程内（可用 render.mjs 备用）。
 
 ## 10. 多语言与比例切换
 
@@ -193,10 +198,13 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 - 字段值本身不限语言——用户用中文答就填中文、用英文答就填英文，build.mjs 直接原样注入（已做 HTML 转义防注入）。
 - 若用户要中英混排（如标题中文、简介英文），按用户给的字面填，无需额外处理。
 
-### 10.2 比例与版式（已锁定，不切换）
-- `build.mjs` 的 `.poster` 已锁定为**固定 2:3 竖卡**（`aspect-ratio:2/3; max-height:94vh; overflow:hidden`，内容在框内滚动），与用户终极定稿 `终版HTML/终版HTML.html` 逐行一致。
-- 本 Skill **不切换比例/版式**（不提供"高度自适应/方图/横版"开关）——保持与终极定稿像素级一致。
-- ⚠️ hero 背景 `transform`（位置/缩放）与蒙层、调色、字体、配色**全程不动**；如需长图 JPG 版式，请用用户独立的只读定稿 `英雄招募帖-长图.html`，不在本 Skill 范围。
+### 10.2 模版与版式（多模版出图）
+- 一份数据（`招募帖-data.json`）**内容共用**，通过 `--template` 选不同模版渲染，背景图与版式随模版切换：
+  - `1.0` = v1 单人剪影背景 · **固定 2:3 竖卡**（`aspect-ratio:2/3; max-height:94vh; overflow:hidden`，内容框内滚动）
+  - `2.0` = v2 五人剪影+满月背景 · **固定 2:3 竖卡**（默认模版）
+  - `3.0` = v2 五人剪影+满月背景 · **长图**（高度自适应，`width:720px`，内容流式排布）
+- 文字注入（`.wrap`）与配色/字体/蒙层逻辑全模版一致；仅 hero 背景图与 `.poster`/`.hero-bg`/`::before`/`.wrap` 的版式随模版变化。
+- ⚠️ 各模版内的 hero 背景 `transform`/`filter` 与蒙层浓度已调好，**改模版请到 `build.mjs` 的 `TEMPLATES` 改对应字段**，不要在生成出的 HTML 里硬改。
 
 ## 11. R 可靠性深度说明（v1.1.0 起增强）
 本 Skill 在「数据→HTML」链路做了多层容错，确保不卡用户：
@@ -210,3 +218,5 @@ C:/Users/User/.workbuddy/skills/recruit-poster/
 - **v1.2.0**：冲 A 级增强——① 新增 `interview-script-en.md` 英文十问剧本并接入 SKILL.md；② 文档补 §10 多语言说明、§11 R 可靠性深度说明。
 - **v1.3.0**：边界收敛——按用户决定**移除 JPG 产出线，Skill 只产出 HTML**；`build.mjs` 的 `POSTER_CSS` 背景层逐行对齐用户终极定稿（`终版HTML/终版HTML.html`，固定 2:3 竖卡），Skill 仅改文字；清理 frontmatter/§3/§4.2/§6/§9/§10.2/§11 中所有 JPG/比例切换/Edge 渲染的过时描述。`render.mjs` 保留为备用资产但不进入主流程。
 - **v1.4.0**：中文名定为「AI赛事英雄帖生成器」，displayName / summary / description / README / 上架填表同步更新。
+- **v1.5.0**：多模版系统——`build.mjs` 新增 `--template` 参数，支持 1.0（v1 单人竖卡）/ 2.0（v2 五人竖卡，默认）/ 3.0（v2 五人长图）三套模版；`design-assets/` 补全 v2 背景图；一份数据内容全模版共用、仅背景与版式随模版切换；SKILL.md 同步更新 §3/§4.2/§6/§9/§10.2。
+- **v1.6.0**：`build.mjs` 生成时自动拷贝当前模版依赖的背景图 + 毛笔字体到输出 HTML 同级的 `design-assets/`，消除跨工作区缺图问题（相对路径引用不再依赖手动补齐素材）。
